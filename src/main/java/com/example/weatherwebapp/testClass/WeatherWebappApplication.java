@@ -1,4 +1,4 @@
-package com.example.weatherwebapp;
+package com.example.weatherwebapp.testClass;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
