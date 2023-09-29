@@ -6,27 +6,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 @Data
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
-public class User {
-
+@NoArgsConstructor
+@Table(name = "subscrioptions")
+public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String lastName;
-    private String email;
-    private String password;
 
-    @OneToMany(mappedBy = "user")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     @ToString.Exclude
-    private List<Subscription> subscriptions;
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    @ToString.Exclude
+    private City city;
 
 }

@@ -1,32 +1,29 @@
 package com.example.weatherwebapp.domain;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
 import java.util.List;
-
 
 @Data
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
-public class User {
+@NoArgsConstructor
+@Table(name = "Cities")
+public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String lastName;
-    private String email;
-    private String password;
-
-    @OneToMany(mappedBy = "user")
+    private String country;
+    private String region;
     @ToString.Exclude
-    private List<Subscription> subscriptions;
+    @OneToMany(mappedBy = "city")
+    private List<CityWeather> cityWeathers;
 
 }

@@ -6,27 +6,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
-public class User {
-
+@NoArgsConstructor
+@Table(name = "weathers")
+public class CityWeather {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String lastName;
-    private String email;
-    private String password;
-
-    @OneToMany(mappedBy = "user")
+    private LocalDateTime createdAt = LocalDateTime.now();
+    @ManyToOne
+    @JoinColumn(name = "city_id")
     @ToString.Exclude
-    private List<Subscription> subscriptions;
+    private City city;
+
+
+
 
 }

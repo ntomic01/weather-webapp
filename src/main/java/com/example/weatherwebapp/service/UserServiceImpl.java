@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     public void save(User user){
 
         if(userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("user vec postoji s tim mejlom");
+            throw new RuntimeException("User this with email already exists.");
         }
         userRepository.save(user);
     }

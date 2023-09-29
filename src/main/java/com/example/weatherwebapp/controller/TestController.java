@@ -20,7 +20,6 @@ public class TestController {
     @PostMapping("/save")
     public void save(@RequestBody User user){
          userService.save(user);
-
     }
 
 
