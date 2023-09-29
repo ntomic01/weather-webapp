@@ -1,7 +1,8 @@
-package com.example.weatherwebapp.service;
+package com.example.weatherwebapp.service.impl;
 
 import com.example.weatherwebapp.domain.User;
 import com.example.weatherwebapp.repository.UserRepository;
+import com.example.weatherwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
