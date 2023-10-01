@@ -5,17 +5,24 @@ import org.indigo.dtomapper.providers.specification.Mapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class ServerConfig {
+public class ServerConfig implements WebMvcConfigurer {
 
-    @Bean("restTemplateTest")
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
-    }
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**").allowedMethods("*");
+	}
 
-    public Mapper getMapper() {
-        return MapperFactory.getMapper();
-    }
+	@Bean
+	public Mapper getMapper() {
+		return MapperFactory.getMapper();
+	}
 
+//	@Bean
+//	public RestTemplate getRestTemplate(){
+//		return new RestTemplate();
+//	}
 }
