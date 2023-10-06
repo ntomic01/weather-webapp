@@ -45,8 +45,22 @@ public class UserServiceImpl implements UserService {
 
         String token = tokenService.generate(user);
         System.out.println(token);
+        System.out.println(isUserVerified(user.getId()));
         return new LoginResponse(token);
 
+    }
+
+    public boolean isUserVerified(Long userId){
+
+        // ova metoda proverava da li je user verifikovan
+
+        User user = userRepository.findById(userId).orElse(null);
+
+        if(user!=null){
+            return user.isVerified();
+        }
+
+        return false;
     }
 
 }

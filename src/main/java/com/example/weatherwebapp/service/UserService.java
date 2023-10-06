@@ -11,4 +11,5 @@ public interface UserService {
     List<User> getActive();
     void save(User user);
     LoginResponse login(LoginRequest loginRequest);
+
 }

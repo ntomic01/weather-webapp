@@ -21,8 +21,8 @@ public class ServerConfig implements WebMvcConfigurer {
 		return MapperFactory.getMapper();
 	}
 
-//	@Bean
-//	public RestTemplate getRestTemplate(){
-//		return new RestTemplate();
-//	}
+	@Bean
+	public RestTemplate getRestTemplate(){
+		return new RestTemplate();
+	}
 }

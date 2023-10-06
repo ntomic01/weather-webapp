@@ -32,9 +32,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subscriptions;
     }
     @Override
-    public void save(Subscription subscription) {
-
-        //bio sam umoran za ovu ali imam ideju :)
+    public void save(Subscription subscription){
 
     }
 

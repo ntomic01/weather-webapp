@@ -16,7 +16,7 @@ public class SubscriptionController {
     private SubscriptionService subscriptionService;
 
     @GetMapping("/findAll")
-    public List<Subscription> findAll(String token){
+    public List<Subscription> findAll(@RequestHeader("/Authorization") String token){
         return subscriptionService.findAll(token);
     }
 

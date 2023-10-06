@@ -21,7 +21,7 @@ public class TestController {
         return "hi";
     }
 
-    @PostMapping("/saveUser")
+    @PostMapping("/save")
     public void save(@RequestBody User user){
         userService.save(user);
     }

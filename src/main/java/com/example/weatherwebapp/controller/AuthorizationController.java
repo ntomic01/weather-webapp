@@ -16,9 +16,11 @@ public class AuthorizationController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/loginUser")
+    @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest){
        return userService.login(loginRequest);
     }
+
+
 
 }
