@@ -2,8 +2,10 @@ package com.example.weatherwebapp.service.impl;
 
 import com.example.weatherwebapp.domain.User;
 import com.example.weatherwebapp.domain.dto.request.LoginRequest;
+import com.example.weatherwebapp.domain.dto.request.RegisterRequest;
 import com.example.weatherwebapp.domain.dto.response.LoginResponse;
 import com.example.weatherwebapp.repository.UserRepository;
+import com.example.weatherwebapp.service.EmailSenderService;
 import com.example.weatherwebapp.service.TokenService;
 import com.example.weatherwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     public List<User> getActive(){
         return userRepository.findAll();
@@ -45,22 +49,50 @@ public class UserServiceImpl implements UserService {
 
         String token = tokenService.generate(user);
         System.out.println(token);
-        System.out.println(isUserVerified(user.getId()));
         return new LoginResponse(token);
 
     }
 
-    public boolean isUserVerified(Long userId){
-
-        // ova metoda proverava da li je user verifikovan
-
-        User user = userRepository.findById(userId).orElse(null);
-
-        if(user!=null){
-            return user.isVerified();
+    @Override
+    public User register(RegisterRequest registerRequest) {
+        // prvo se pitam da li postoji user sa vec tim email i passwordom
+        if(userRepository.findByEmail(registerRequest.getEmail())!= null){
+            throw new RuntimeException("user vec postoji s tim imejlom");
         }
+        if(userRepository.findByPassword(registerRequest.getPassword())!=null){
+            throw new RuntimeException("user vec postoji s tim passwordom");
+        }
+        // ako ovo prodje setuje iz postmana sve atribute koje sam zadao sve parametre
+        User user = new User();
+        user.setName(registerRequest.getFirstName());
+        user.setLastName(registerRequest.getLastName());
+        user.setEmail(registerRequest.getEmail());
+        user.setPassword(registerRequest.getPassword());
+        user.setVerified(false);
 
-        return false;
+        // nakon njegove registracije, on dobija token s kojim ide dalje tj sacuvan ce biti u bazu i sledi verifikacija
+
+        String token = tokenService.generate(user);
+        System.out.println(token);
+
+        return userRepository.save(user);
+
+        // ovde treba jos za mail da sredim!!!
     }
+
+    @Override
+    public User verifyAccount(String email) {
+        User user = userRepository.findByEmail(email);
+        if(user.getEmail()==null){
+            throw new RuntimeException("user s tim imejlom postoji");
+        }
+        user.setVerified(true);
+        userRepository.save(user);
+        return user;
+
+        // Ovde sam probao long userId ali mi trazi optional user pa ne znam sta da vratim i onda sam stavio mejl a to vrv nije bas logicno :D
+    }
+
+
 
 }
