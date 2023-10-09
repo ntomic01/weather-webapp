@@ -59,10 +59,13 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByEmail(registerRequest.getEmail())!= null){
             throw new RuntimeException("user vec postoji s tim imejlom");
         }
+        // todo: nema potrebe da proveravas password, nije unique moze vise da ih ima isti,
+        // tim pre sto ako kazes da vec postoji user s tim passwordom moze da uzme i redom da proverava usernomove dok ne provali :D
         if(userRepository.findByPassword(registerRequest.getPassword())!=null){
             throw new RuntimeException("user vec postoji s tim passwordom");
         }
         // ako ovo prodje setuje iz postmana sve atribute koje sam zadao sve parametre
+        // todo: super je ovako ali zgodan primer da iskoristis dto mapper -> User user = mapper.map(registerRequest, User.class);
         User user = new User();
         user.setName(registerRequest.getFirstName());
         user.setLastName(registerRequest.getLastName());
@@ -71,10 +74,12 @@ public class UserServiceImpl implements UserService {
         user.setVerified(false);
 
         // nakon njegove registracije, on dobija token s kojim ide dalje tj sacuvan ce biti u bazu i sledi verifikacija
-
+        // todo: ne treba ti ovde token, svejedno ga ne vracas nigde nazad
         String token = tokenService.generate(user);
         System.out.println(token);
-
+        // todo: e ok ali ovde bi trebalo da vratis UserResponse nakon cuvanja znaci
+        // todo: 1) userRepository.save(user);
+        // todo: 2) return mapper.map(user, UserResponse.class); // on moze da bude isti kao user po poljima bez liste subscriptions
         return userRepository.save(user);
 
         // ovde treba jos za mail da sredim!!!
