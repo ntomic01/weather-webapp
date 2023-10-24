@@ -46,10 +46,16 @@ public class UserServiceImpl implements UserService {
 
         // ova metoda loguje postojeceg usera
 
-        User user = userRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
+        User user = userRepository.findByEmail(loginRequest.getEmail());
 
         if(user == null){
            throw new RuntimeException("user not found!");
+        }
+        if(!loginRequest.getPassword().equals(user.getPassword())) {
+            throw new RuntimeException("bad credentials!");
+        }
+        if(!user.isAccountVerified()) {
+            throw new RuntimeException("account isn't verified!");
         }
 
         String token = tokenService.generate(user);
@@ -61,34 +67,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse register(RegisterRequest registerRequest) {
         // prvo se pitam da li postoji user sa vec tim email i passwordom
-        if(userRepository.findByEmail(registerRequest.getEmail())!= null){
+        if(userRepository.existsByEmail(registerRequest.getEmail())){
             throw new RuntimeException("user vec postoji s tim imejlom");
         }
         // tim pre sto ako kazes da vec postoji user s tim passwordom moze da uzme i redom da proverava usernomove dok ne provali :D
         // ako ovo prodje setuje iz postmana sve atribute koje sam zadao sve parametre
-        // todo: super je ovako ali zgodan primer da iskoristis dto mapper -> User user = mapper.map(registerRequest, User.class);
-        User user = new User();
-        user.setName(registerRequest.getFirstName());
-        user.setLastName(registerRequest.getLastName());
-        user.setEmail(registerRequest.getEmail());
-        user.setPassword(registerRequest.getPassword());
-//        user.setVerified(false);
-        // nakon njegove registracije, on dobija token s kojim ide dalje tj sacuvan ce biti u bazu i sledi verifikacija
+        User user = mapper.map(registerRequest, User.class);
         userRepository.save(user);
-        return mapper.map(user,UserResponse.class);
         // ovde treba jos za mail da sredim!!!
+        emailSenderService.sendVerificationMail(registerRequest.getEmail());
+        return mapper.map(user,UserResponse.class);
     }
 
     @Override
-    public User verifyAccount(String email) {
+    public void verifyAccount(String email) {
         User user = userRepository.findByEmail(email);
-        if(user.getEmail()==null){
-            throw new RuntimeException("user s tim imejlom postoji");
+        if(user == null){
+            throw new RuntimeException("user s tim imejlom ne postoji");
         }
-//        user.setVerified(true);
+        user.setAccountVerified(true);
         userRepository.save(user);
-        return user;
-
         // Ovde sam probao long userId ali mi trazi optional user pa ne znam sta da vratim i onda sam stavio mejl a to vrv nije bas logicno :D
     }
 

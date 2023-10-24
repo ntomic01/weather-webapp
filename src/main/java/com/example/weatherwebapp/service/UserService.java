@@ -14,7 +14,7 @@ public interface UserService {
     void save(User user);
     LoginResponse login(LoginRequest loginRequest);
     UserResponse register(RegisterRequest registarRequest);
-    User verifyAccount(String email);
+    void verifyAccount(String email);
     User findById(Long userId);
 
 
