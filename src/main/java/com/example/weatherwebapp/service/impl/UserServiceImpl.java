@@ -4,14 +4,17 @@ import com.example.weatherwebapp.domain.User;
 import com.example.weatherwebapp.domain.dto.request.LoginRequest;
 import com.example.weatherwebapp.domain.dto.request.RegisterRequest;
 import com.example.weatherwebapp.domain.dto.response.LoginResponse;
+import com.example.weatherwebapp.domain.dto.response.UserResponse;
 import com.example.weatherwebapp.repository.UserRepository;
 import com.example.weatherwebapp.service.EmailSenderService;
 import com.example.weatherwebapp.service.TokenService;
 import com.example.weatherwebapp.service.UserService;
+import org.indigo.dtomapper.providers.specification.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,6 +24,8 @@ public class UserServiceImpl implements UserService {
     private TokenService tokenService;
     @Autowired
     private EmailSenderService emailSenderService;
+    @Autowired
+    private Mapper mapper;
 
     public List<User> getActive(){
         return userRepository.findAll();
@@ -54,16 +59,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(RegisterRequest registerRequest) {
+    public UserResponse register(RegisterRequest registerRequest) {
         // prvo se pitam da li postoji user sa vec tim email i passwordom
         if(userRepository.findByEmail(registerRequest.getEmail())!= null){
             throw new RuntimeException("user vec postoji s tim imejlom");
         }
-        // todo: nema potrebe da proveravas password, nije unique moze vise da ih ima isti,
         // tim pre sto ako kazes da vec postoji user s tim passwordom moze da uzme i redom da proverava usernomove dok ne provali :D
-        if(userRepository.findByPassword(registerRequest.getPassword())!=null){
-            throw new RuntimeException("user vec postoji s tim passwordom");
-        }
         // ako ovo prodje setuje iz postmana sve atribute koje sam zadao sve parametre
         // todo: super je ovako ali zgodan primer da iskoristis dto mapper -> User user = mapper.map(registerRequest, User.class);
         User user = new User();
@@ -71,17 +72,10 @@ public class UserServiceImpl implements UserService {
         user.setLastName(registerRequest.getLastName());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(registerRequest.getPassword());
-        user.setVerified(false);
-
+//        user.setVerified(false);
         // nakon njegove registracije, on dobija token s kojim ide dalje tj sacuvan ce biti u bazu i sledi verifikacija
-        // todo: ne treba ti ovde token, svejedno ga ne vracas nigde nazad
-        String token = tokenService.generate(user);
-        System.out.println(token);
-        // todo: e ok ali ovde bi trebalo da vratis UserResponse nakon cuvanja znaci
-        // todo: 1) userRepository.save(user);
-        // todo: 2) return mapper.map(user, UserResponse.class); // on moze da bude isti kao user po poljima bez liste subscriptions
-        return userRepository.save(user);
-
+        userRepository.save(user);
+        return mapper.map(user,UserResponse.class);
         // ovde treba jos za mail da sredim!!!
     }
 
@@ -91,13 +85,19 @@ public class UserServiceImpl implements UserService {
         if(user.getEmail()==null){
             throw new RuntimeException("user s tim imejlom postoji");
         }
-        user.setVerified(true);
+//        user.setVerified(true);
         userRepository.save(user);
         return user;
 
         // Ovde sam probao long userId ali mi trazi optional user pa ne znam sta da vratim i onda sam stavio mejl a to vrv nije bas logicno :D
     }
 
+    @Override
+    public User findById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        return null;
+    }
 
 
 }

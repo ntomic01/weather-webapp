@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -22,9 +23,14 @@ public class User {
     private Long id;
     private String name;
     private String lastName;
+    @Column(unique = true)
     private String email;
     private String password;
-    private boolean isVerified;
+    private String token;
+    private boolean accountVerified;
+
+    @OneToMany(mappedBy = "user")
+    private Set<SecureToken> tokens;
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
