@@ -21,14 +21,14 @@ public class AuthorizationController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest){
-        return userService.login(loginRequest);
-    }
-
     @PostMapping("/register")
     public UserResponse register(@RequestBody RegisterRequest registerRequest){
         return userService.register(registerRequest);
+    }
+
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest loginRequest){
+        return userService.login(loginRequest);
     }
 
     // http://localhost:8080/authorize/verifyAccount?email=...

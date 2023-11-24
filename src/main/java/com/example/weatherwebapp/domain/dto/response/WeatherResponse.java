@@ -4,17 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
+public class WeatherResponse {
 
     private Long id;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
+    private List<Parameters> weathers;
 
 }

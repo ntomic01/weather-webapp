@@ -45,12 +45,4 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         }
     }
 
-    public void sendVerificationEmail(String to) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(to);
-        simpleMailMessage.setSubject("Verifikacija kreiranog usera(njegovog naloga)");
-        simpleMailMessage.setText("Idite na link da verifikuje svoj nalog: localhost:8080/authorize/verifyAccount");
-    }
-
-
 }
