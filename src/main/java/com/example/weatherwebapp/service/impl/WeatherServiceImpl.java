@@ -2,6 +2,7 @@ package com.example.weatherwebapp.service.impl;
 
 import com.example.weatherwebapp.domain.City;
 import com.example.weatherwebapp.domain.CityWeather;
+import com.example.weatherwebapp.domain.dto.response.DailyWeatherResponse;
 import com.example.weatherwebapp.repository.CityRepository;
 import com.example.weatherwebapp.repository.CityWeatherRepo;
 import com.example.weatherwebapp.service.CityService;
@@ -22,12 +23,26 @@ public class WeatherServiceImpl implements WeatherService {
     private CityRepository cityRepository;
     @Autowired
     private CityWeatherRepo cityWeatherRepo;
+    @Autowired
+    private WeatherIntegration weatherIntegration;
 
     @Override
-    public void FetchWeatherData() {
+    public void fetchWeatherData() {
+        // korak 1. dovucem sve gradove iz baze(CityRepository)
+        List<City> cities = cityRepository.findAll();
+        // korak 2. povucem vremensku prognozu za svaki grad
+        for(City city: cities) {
+            DailyWeatherResponse dailyWeatherResponse = weatherIntegration.getWeatherForCity(city.getName());
+            // korak 3. sacuvam CityWeather za svaki grad i datum.
+            CityWeather cityWeather = new CityWeather();
+            cityWeather.setCity(city);
+            cityWeather.setMinTemp(dailyWeatherResponse.getMinTemp());
+            cityWeather.setMaxTemp(dailyWeatherResponse.getMaxTemp());
+            cityWeather.setAvgTemp(dailyWeatherResponse.getAvgTemp());
+            cityWeatherRepo.save(cityWeather);
+        }
 
-        List<City> cities = new ArrayList<>();
+        // korak 4. napravim neki testController i probam
 
-        
     }
 }
