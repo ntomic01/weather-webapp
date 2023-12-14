@@ -37,6 +37,17 @@ public class CityServiceImpl implements CityService {
         cityRepository.save(city);
     }
 
-
+    @Override
+    public City getCityByName(String cityName, List<City> cities) {
+        for (City city : cities) {
+            if(city.getName().equalsIgnoreCase(cityName)) {
+                return city;
+            }
+        }
+        throw new RuntimeException("nije pronadjen nijedan grada."); // City not found
+    }
 
 }
+
+
+

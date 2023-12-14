@@ -1,6 +1,9 @@
 package com.example.weatherwebapp.service.impl;
 
+import com.example.weatherwebapp.domain.dto.response.DailyWeatherResponse;
+import com.example.weatherwebapp.domain.dto.response.DayResponse;
 import com.example.weatherwebapp.domain.dto.response.Parameters;
+import com.example.weatherwebapp.domain.dto.response.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -8,6 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -18,28 +23,22 @@ public class WeatherIntegration {
     @Autowired
     private RestTemplate restTemplate;
 
-    public Map<String, List<Parameters>> getParameters() {
-        try {
-            // iz postmana adresa
-            String url = "http://api.weatherapi.com/v1/forecast.json?key=e58e1c9ca4b546c0825125407232211&q=city&days=1&aqi=no&alerts=no";
-            HttpHeaders headers = new HttpHeaders();
-            headers.put("apiKey", List.of("e58e1c9ca4b546c0825125407232211"));
-            headers.put("maxTemp_c", List.of(""));
-            headers.put("minTemp_c", List.of(""));
-            headers.put("avgTemp_c", List.of(""));
-            HttpEntity<?> httpEntity = new HttpEntity<>(null, headers);
-            ParameterizedTypeReference<Map<String, List<Parameters>>> responseReference = new ParameterizedTypeReference<>() {};
-            ResponseEntity<Map<String, List<Parameters>>> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    httpEntity,
-                    responseReference
-            );
-            return response.getBody();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    private final String apiKey = "e58e1c9ca4b546c0825125407232211";
+
+    public DailyWeatherResponse getWeatherForCity(String city){
+        RestTemplate restTemplate = new RestTemplate();
+        String apiUrl = String.format("http://api.weatherapi.com/v1/forecast.json?key=%s&q=%s&days=1&aqi=no&alerts=no",apiKey,city);
+        ResponseEntity<WeatherResponse> response = restTemplate.getForEntity(apiUrl, WeatherResponse.class);
+        WeatherResponse weatherResponse = response.getBody();
+        DayResponse dayResponse = weatherResponse.getForecast().getForecastday().get(0).getDay();
+        DailyWeatherResponse dailyWeatherResponse = new DailyWeatherResponse();
+        // prepisujem iz WeatherResponse u DailyWeatherResponse
+        dailyWeatherResponse.setMaxTemp(dayResponse.getMaxTemp());
+        dailyWeatherResponse.setMinTemp(dayResponse.getMintemp_c());
+        dailyWeatherResponse.setAvgTemp(dayResponse.getAvgtemp_c());
+        dailyWeatherResponse.setCity(city);
+        return dailyWeatherResponse;
+
     }
 
 
