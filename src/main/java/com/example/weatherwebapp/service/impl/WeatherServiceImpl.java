@@ -1,5 +1,6 @@
 package com.example.weatherwebapp.service.impl;
 
+import com.example.weatherwebapp.controller.TestController;
 import com.example.weatherwebapp.domain.City;
 import com.example.weatherwebapp.domain.CityWeather;
 import com.example.weatherwebapp.domain.dto.response.DailyWeatherResponse;
@@ -43,6 +44,7 @@ public class WeatherServiceImpl implements WeatherService {
             cityWeather.setAvgTemp(dailyWeatherResponse.getAvgTemp());
             cityWeatherRepo.save(cityWeather);
         }
+
 
         // korak 4. napravim neki testController i probam
 
