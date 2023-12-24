@@ -1,5 +1,7 @@
 package com.example.weatherwebapp.controller;
 
+import java.time.LocalDate;
+
 import com.example.weatherwebapp.domain.User;
 import com.example.weatherwebapp.service.UserService;
 import com.example.weatherwebapp.service.WeatherService;
@@ -33,7 +35,11 @@ public class TestController {
         weatherService.fetchWeatherData();
     }
 
-
-
+    // metoda koja vraca info o temp za grad i datum
+    // /user/fetchWeatherData?cityName=Belgrade&date=2023-12-25
+    @GetMapping("/fetchWeatherData")
+    public void fetchWeatherData(String cityName, LocalDate date) {
+        weatherService.fetchDataByCityAndDate(cityName, date);
+    }
 
 }

@@ -22,6 +22,7 @@ public class CityWeather {
     private Long minTemp;
     private Long maxTemp;
     private Long avgTemp;
+    private LocalDate date;
     private LocalDateTime createdAt = LocalDateTime.now();
     @ManyToOne
     @JoinColumn(name = "city_id")

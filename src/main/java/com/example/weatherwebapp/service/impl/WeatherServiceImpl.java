@@ -11,6 +11,7 @@ import org.indigo.dtomapper.providers.specification.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +37,7 @@ public class WeatherServiceImpl implements WeatherService {
             // korak 3. sacuvam CityWeather za svaki grad i datum.
             CityWeather cityWeather = new CityWeather();
             cityWeather.setCity(city);
+            cityWeather.setDate(LocalDate.now());
             cityWeather.setMinTemp(dailyWeatherResponse.getMinTemp());
             cityWeather.setMaxTemp(dailyWeatherResponse.getMaxTemp());
             cityWeather.setAvgTemp(dailyWeatherResponse.getAvgTemp());
@@ -44,5 +46,10 @@ public class WeatherServiceImpl implements WeatherService {
 
         // korak 4. napravim neki testController i probam
 
+    }
+
+    @Override
+    public void fetchDataByCityAndDate(String cityName, LocalDate localDate) {
+        cityWeatherRepo.findByCity_NameAndDate(cityName, localDate);
     }
 }
