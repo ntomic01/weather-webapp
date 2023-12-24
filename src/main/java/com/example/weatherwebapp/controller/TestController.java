@@ -4,11 +4,7 @@ import com.example.weatherwebapp.domain.User;
 import com.example.weatherwebapp.service.UserService;
 import com.example.weatherwebapp.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -28,10 +24,12 @@ public class TestController {
         userService.save(user);
     }
 
-    @GetMapping("/fetch")
+    @PostMapping("/fetch")
     public void fetchWeatherData(){
         weatherService.fetchWeatherData();
     }
+
+
 
 
 

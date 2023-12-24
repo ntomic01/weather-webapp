@@ -14,14 +14,6 @@ import org.springframework.web.client.RestTemplate;
 public class WeatherController {
     private final String apiKey = "e58e1c9ca4b546c0825125407232211";
 
-//    @GetMapping("/city")
-//    public ResponseEntity<String> getWeatherForCity(@RequestParam String city){
-//        RestTemplate restTemplate = new RestTemplate();
-//        String apiUrl = String.format("http://api.weatherapi.com/v1/forecast.json?key=%s&q=%s&days=1&aqi=no&alerts=no",apiKey,city);
-//        ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
-//        return ResponseEntity.ok(response.getBody());
-//     }
-
     @GetMapping("/city")
     public ResponseEntity<DailyWeatherResponse> getWeatherForCity(@RequestParam String city){
         RestTemplate restTemplate = new RestTemplate();
