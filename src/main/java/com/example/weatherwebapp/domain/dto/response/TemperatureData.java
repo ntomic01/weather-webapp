@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TemperatureData {
 
+    private String cityName;
     private Long minTemp;
     private Long maxTemp;
     private Long avgTemp;

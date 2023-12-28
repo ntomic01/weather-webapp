@@ -35,8 +35,14 @@ public class TestController {
     // metoda koja vraca info o temp za grad i datum
     // /user/fetchWeatherData?cityName=Belgrade&date=2023-12-25
     @GetMapping("/fetchWeatherData")
-    public TemperatureData fetchWeatherData(@RequestParam String cityName, LocalDate localDate) {
+    public TemperatureData fetchWeatherData(@RequestParam String cityName, @RequestParam LocalDate localDate) {
         return weatherService.fetchDataByCityAndDate(cityName,localDate);
+    }
+
+
+    @PostMapping("/sendNotifications")
+    public void sendNotifications() {
+        weatherService.sendDailyWeather();
     }
 
 

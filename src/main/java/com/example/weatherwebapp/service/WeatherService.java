@@ -9,6 +9,8 @@ public interface WeatherService {
 
     void fetchWeatherData();
 
+    void sendDailyWeather();
+
     TemperatureData fetchDataByCityAndDate(String cityName, LocalDate localDate);
 
 }

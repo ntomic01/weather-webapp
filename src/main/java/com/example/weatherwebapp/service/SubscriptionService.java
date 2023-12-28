@@ -1,10 +1,8 @@
 package com.example.weatherwebapp.service;
 
-import com.example.weatherwebapp.domain.City;
-import com.example.weatherwebapp.domain.Subscription;
-import com.example.weatherwebapp.domain.User;
-
 import java.util.List;
+
+import com.example.weatherwebapp.domain.Subscription;
 
 public interface SubscriptionService {
 
