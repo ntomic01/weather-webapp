@@ -3,13 +3,14 @@ package com.example.weatherwebapp.controller;
 import java.time.LocalDate;
 
 import com.example.weatherwebapp.domain.User;
+import com.example.weatherwebapp.domain.dto.response.TemperatureData;
 import com.example.weatherwebapp.service.UserService;
 import com.example.weatherwebapp.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/test")
 public class TestController {
     @Autowired
     private UserService userService;
@@ -34,8 +35,8 @@ public class TestController {
     // metoda koja vraca info o temp za grad i datum
     // /user/fetchWeatherData?cityName=Belgrade&date=2023-12-25
     @GetMapping("/fetchWeatherData")
-    public void fetchWeatherData(String cityName, LocalDate date) {
-        weatherService.fetchDataByCityAndDate(cityName, date);
+    public TemperatureData fetchWeatherData(@RequestParam String cityName, LocalDate localDate) {
+        return weatherService.fetchDataByCityAndDate(cityName,localDate);
     }
 
 

@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/weather")
 public class WeatherController {
-    private final String apiKey = "e58e1c9ca4b546c0825125407232211";
+    private final String apiKey = "6e491b2697094040949140417232512";
 
     @GetMapping("/city")
     public ResponseEntity<DailyWeatherResponse> getWeatherForCity(@RequestParam String city){

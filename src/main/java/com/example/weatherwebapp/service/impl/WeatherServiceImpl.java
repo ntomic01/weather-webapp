@@ -4,6 +4,7 @@ import com.example.weatherwebapp.controller.TestController;
 import com.example.weatherwebapp.domain.City;
 import com.example.weatherwebapp.domain.CityWeather;
 import com.example.weatherwebapp.domain.dto.response.DailyWeatherResponse;
+import com.example.weatherwebapp.domain.dto.response.TemperatureData;
 import com.example.weatherwebapp.repository.CityRepository;
 import com.example.weatherwebapp.repository.CityWeatherRepo;
 import com.example.weatherwebapp.service.CityService;
@@ -33,7 +34,7 @@ public class WeatherServiceImpl implements WeatherService {
         // korak 1. dovucem sve gradove iz baze(CityRepository)
         List<City> cities = cityRepository.findAll();
         // korak 2. povucem vremensku prognozu za svaki grad
-        for(City city: cities) {
+        for (City city : cities) {
             DailyWeatherResponse dailyWeatherResponse = weatherIntegration.getWeatherForCity(city.getName());
             // korak 3. sacuvam CityWeather za svaki grad i datum.
             CityWeather cityWeather = new CityWeather();
@@ -45,13 +46,30 @@ public class WeatherServiceImpl implements WeatherService {
             cityWeatherRepo.save(cityWeather);
         }
 
-
         // korak 4. napravim neki testController i probam
 
     }
 
     @Override
-    public void fetchDataByCityAndDate(String cityName, LocalDate localDate) {
-        cityWeatherRepo.findByCity_NameAndDate(cityName, localDate);
+    public TemperatureData fetchDataByCityAndDate(String cityName, LocalDate localDate) {
+
+        CityWeather cw = cityWeatherRepo.findByCity_NameAndDate(cityName, localDate);
+        TemperatureData temperature = new TemperatureData();
+        temperature.setMinTemp(cw.getMinTemp());
+        temperature.setMaxTemp(cw.getMaxTemp());
+        temperature.setAvgTemp(cw.getAvgTemp());
+        System.out.println(temperature);
+
+        return mapper.map(temperature, TemperatureData.class);
+
     }
+
+
+
+
+
 }
+
+
+
+
