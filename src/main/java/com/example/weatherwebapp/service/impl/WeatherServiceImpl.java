@@ -62,8 +62,23 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
+    public TemperatureData fetchDataByCityAndDate(String cityName, LocalDate localDate) {
+
+        CityWeather cw = cityWeatherRepo.findByCity_NameAndDate(cityName, localDate);
+        TemperatureData temperature = new TemperatureData();
+        temperature.setCityName(cityName);
+        temperature.setMinTemp(cw.getMinTemp());
+        temperature.setMaxTemp(cw.getMaxTemp());
+        temperature.setAvgTemp(cw.getAvgTemp());
+        System.out.println(temperature);
+
+        return temperature;
+
+    }
+
+    @Override
     public void sendDailyWeather() {
-        // korak 1: pronadjem sve users
+        // korak 1: pronadjem sve usere
         List<User> users = userRepository.findAll();
         // korak 2: uzimam trenutni datum
         LocalDate currentDate = LocalDate.now();
@@ -88,28 +103,43 @@ public class WeatherServiceImpl implements WeatherService {
             }
             System.out.println("=================================");
 
+            emailSenderService.sendEmail(userEmail,"Weather", prepareMessage(data));
+
             // StringBuilder, konkateniranjem
 
-
-            emailSenderService.sendEmail(userEmail, "Daily weather", "TODO");
         }
 
-    }
-
-    @Override
-    public TemperatureData fetchDataByCityAndDate(String cityName, LocalDate localDate) {
-
-        CityWeather cw = cityWeatherRepo.findByCity_NameAndDate(cityName, localDate);
-        TemperatureData temperature = new TemperatureData();
-        temperature.setCityName(cityName);
-        temperature.setMinTemp(cw.getMinTemp());
-        temperature.setMaxTemp(cw.getMaxTemp());
-        temperature.setAvgTemp(cw.getAvgTemp());
-        System.out.println(temperature);
-
-        return temperature;
 
     }
+
+    public String prepareMessage(List<TemperatureData> dataList){
+
+        StringBuilder message = new StringBuilder();
+
+        message.append("Pozdrav").append(":\n\n");
+        message.append("Evo vam vremenske prognoze za danas za gradove na koje ste se pretplatili:\n\n");
+
+        for(TemperatureData data: dataList){
+            double minTemp = data.getMinTemp();
+            double maxTemp = data.getMaxTemp();
+            double avgTemp = data.getAvgTemp();
+            String cityName = data.getCityName();
+            message.append(cityName).append(":\n\n");
+            message.append("Minimalna temp").append(minTemp).append(":\n\n");
+            message.append("Maximalna temp").append(maxTemp).append(":\n\n");
+            message.append("Prosecna temp").append(avgTemp).append(":\n\n");
+
+        }
+
+      //  message.append(dataList).append("\n\n");
+
+        message.append("Hvala sto koristite nasu uslugu!");
+
+        return message.toString();
+
+    }
+
+
 
 
 

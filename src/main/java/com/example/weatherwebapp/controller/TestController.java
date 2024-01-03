@@ -7,6 +7,7 @@ import com.example.weatherwebapp.domain.dto.response.TemperatureData;
 import com.example.weatherwebapp.service.UserService;
 import com.example.weatherwebapp.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
