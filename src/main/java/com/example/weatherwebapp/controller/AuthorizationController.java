@@ -26,16 +26,16 @@ public class AuthorizationController {
         return userService.register(registerRequest);
     }
 
-    @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest){
-        return userService.login(loginRequest);
-    }
-
     // http://localhost:8080/authorize/verifyAccount?email=...
     @GetMapping("/verifyAccount")
     public ResponseEntity<String> verify(@RequestParam String email) {
         userService.verifyAccount(email);
-        return ResponseEntity.ok("Verifikacija uspešna!");
+        return ResponseEntity.ok("Verifikacija  uspešna!");
+    }
+
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest loginRequest){
+        return userService.login(loginRequest);
     }
 
 }

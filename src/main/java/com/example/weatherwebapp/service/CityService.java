@@ -9,6 +9,5 @@ public interface CityService {
     List<City> getAll();
 //    void save(City city);
     void save(City city);
-
     City getCityByName(String cityName, List<City> cities);
 }

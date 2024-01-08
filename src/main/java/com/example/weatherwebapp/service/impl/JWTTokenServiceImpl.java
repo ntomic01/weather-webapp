@@ -22,7 +22,7 @@ public class JWTTokenServiceImpl implements TokenService {
     @Autowired
     private UserRepository userRepository;
 
-    private static final long EXPIRATION_TIME = 3600000;
+    private static final long EXPIRATION_TIME = 86400000;
 
     @Value("${token.secret}")
     private String tokenSecret;
@@ -31,7 +31,7 @@ public class JWTTokenServiceImpl implements TokenService {
 
     private JWTTokenServiceImpl(@Value("${token.secret}")String tokenSecret){
         this.tokenSecret = tokenSecret;
-        this.verifier = JWT.require(Algorithm.HMAC256(tokenSecret)).build();
+        this.verifier = JWT.require(Algorithm.HMAC512(tokenSecret)).build();
     }
 
     @Override
